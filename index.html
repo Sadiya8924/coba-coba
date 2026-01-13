@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    
     <title>Portal Supervisi Sekolah</title>
     <style>
-        /* --- STYLE CSS --- */
+        /* --- STYLE RESPONSIVE --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 20px;
             color: #333;
@@ -17,117 +21,171 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding-bottom: 60px;
+            padding-bottom: 80px;
         }
 
         /* Header Profil */
         .main-header {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 16px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 30px;
         }
 
         .profile-img {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background-color: #ddd;
-            margin: 0 auto 15px;
-            /* FOTO TANTE */
+            margin: 0 auto 10px;
+            /* Ganti fotonya di sini */
             background-image: url('foto-tante.jpg');
             background-size: cover;
             background-position: center;
-            border: 4px solid #eef2ff;
+            border: 3px solid #eef2ff;
         }
 
-        h1 { margin: 0; font-size: 1.4rem; color: #1e293b; }
-        p.subtitle { margin: 5px 0 0; color: #64748b; font-size: 0.95rem; }
+        h1 { margin: 0; font-size: 1.2rem; color: #1e293b; font-weight: 800; }
+        p.subtitle { margin: 5px 0 0; color: #64748b; font-size: 0.9rem; }
 
-        /* Header Sekolah (Pemisah) */
-        .school-separator {
-            margin-top: 40px;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #2563eb, #1d4ed8);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+        /* --- GAYA DROPDOWN (ACCORDION) --- */
+        
+        /* Bungkus per Sekolah */
+        details.school-group {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden; /* Biar sudut tumpul ga kepotong */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        /* Saat dibuka, kasih shadow lebih gede */
+        details.school-group[open] {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #3b82f6;
+        }
+
+        /* Judul Sekolah (Tombol Klik) */
+        summary.school-header {
+            background: white; /* Default putih */
+            padding: 15px 20px;
             font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
+            font-size: 1rem;
+            cursor: pointer;
+            list-style: none; /* Hilangkan panah default browser */
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+            color: #1e293b;
+            border-bottom: 1px solid transparent;
+            transition: background 0.2s;
+        }
+
+        /* Hapus panah default di Chrome/Safari */
+        summary.school-header::-webkit-details-marker {
+            display: none;
+        }
+
+        /* Icon Sekolah */
+        summary.school-header::before {
+            content: '🏫';
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        /* Tanda Panah Kanan (Chevron) buatan sendiri */
+        summary.school-header::after {
+            content: '▼'; 
+            font-size: 0.8rem;
+            color: #94a3b8;
+            transition: transform 0.3s;
+        }
+
+        /* Saat dibuka: Ubah warna header jadi biru & putar panah */
+        details[open] summary.school-header {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-bottom: 1px solid #dbeafe;
         }
         
-        .school-separator::before {
-            content: '🏫'; /* Ikon Sekolah */
-            margin-right: 10px;
-            font-size: 1.3rem;
+        details[open] summary.school-header::after {
+            transform: rotate(180deg); /* Putar panah ke atas */
+            color: #1d4ed8;
         }
 
-        /* Kartu Guru */
-        .guru-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        /* Konten List Guru (Isi Dropdown) */
+        .guru-list {
+            padding: 15px;
+            background-color: #fff;
+            animation: slideDown 0.3s ease-out;
         }
+
+        /* Kartu Guru di dalam Dropdown */
+        .guru-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .guru-card:last-child { margin-bottom: 0; }
 
         .guru-name {
-            font-weight: 700;
+            font-weight: 600;
             color: #334155;
-            margin-bottom: 15px;
-            font-size: 1.05rem;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 10px;
         }
+        .guru-name::before { content: '👤'; margin-right: 8px; }
 
-        .guru-name::before {
-            content: '👤'; /* Ikon Guru */
-            margin-right: 8px;
-        }
-
-        /* GRID TOMBOL (Diperbaiki biar muat teks panjang) */
+        /* Grid Tombol Link */
         .links-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
         }
 
         .link-btn {
-            display: flex; /* Biar teks bisa di tengah vertikal */
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 10px;
-            background-color: #f8fafc;
+            padding: 8px;
+            background-color: white;
             color: #475569;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.8rem; /* Font agak kecil dikit biar muat */
-            font-weight: 600;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
             text-align: center;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #cbd5e1;
             transition: all 0.2s;
-            min-height: 40px; /* Tinggi minimal */
-            word-wrap: break-word; /* Biar teks panjang turun ke bawah */
-            line-height: 1.3;
+            min-height: 36px;
+            line-height: 1.2;
         }
 
         .link-btn:hover {
             background-color: #3b82f6;
             color: white;
             border-color: #3b82f6;
+            transform: translateY(-1px);
         }
 
-        .loading { text-align: center; padding: 40px; color: #64748b; }
-        .error { color: red; text-align: center; padding: 20px; }
+        .loading { text-align: center; padding: 40px; color: #64748b; font-style: italic; }
+        .version { text-align: center; font-size: 10px; color: #ccc; margin-top: 30px; }
+        
+        /* Animasi Dropdown */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
     </style>
 </head>
 <body>
@@ -136,120 +194,161 @@
         <div class="main-header">
             <div class="profile-img"></div>
             <h1>Portal Supervisi Sekolah</h1>
-            <p class="subtitle">Kumpulan Dokumen Administrasi Guru</p>
+            <p class="subtitle">Kumpulan Dokumen Administrasi</p>
         </div>
 
         <div id="app">
-            <div class="loading">⏳ Sedang sinkronisasi data...</div>
+            <div class="loading">Sedang memuat data terbaru...</div>
         </div>
+
+        <div class="version">System v4.0 (Dropdown Mode)</div>
     </div>
 
     <script>
         // ==========================================
-        // 1. MASUKKAN LINK CSV DI SINI
+        // CONFIG: MASUKKAN LINK CSV DISINI
         // ==========================================
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSXgwNDvj-QoABB_VFgNfCGeAm0LP2UFq4QdzLi21yfI6PMqaXtS1Khq_IpLn5lx7-xmvrGncUdZhf/pub?output=csv'; 
 
         // ==========================================
-        // LOGIC CODE
+        // LOGIC
         // ==========================================
         const app = document.getElementById('app');
 
         async function init() {
             try {
-                const res = await fetch(SHEET_CSV_URL);
+                // Anti-Cache mechanism
+                const url = SHEET_CSV_URL + `&t=${new Date().getTime()}`;
+                const res = await fetch(url);
                 const text = await res.text();
-                renderPage(text);
+                renderAccordion(text);
             } catch (err) {
                 console.error(err);
-                app.innerHTML = `<div class="error">Gagal memuat data. Pastikan link CSV benar.</div>`;
+                app.innerHTML = '<p style="text-align:center; color:red">Gagal memuat data.</p>';
             }
         }
 
-        function renderPage(csvText) {
-            app.innerHTML = ''; 
-
+        function renderAccordion(csvText) {
+            app.innerHTML = '';
+            
             const rows = csvText.split('\n');
+            const headers = parseCSVRow(rows[0]); // Header Tombol (Baris 1)
 
-            // 1. AMBIL JUDUL DARI HEADER EXCEL (Baris 1)
-            // parseCSVRow menangani kalau ada koma di dalam judul
-            const headers = parseCSVRow(rows[0]); 
+            // Kita butuh wadah sementara untuk Sekolah yang sedang diproses
+            let currentSchoolDetails = null;
+            let currentGuruListDiv = null;
 
-            // 2. Loop Data (Mulai Baris 2)
+            // Loop Data (Mulai Baris 2)
             for (let i = 1; i < rows.length; i++) {
                 const rowRaw = rows[i];
-                if (!rowRaw.trim()) continue; 
+                if (!rowRaw.trim()) continue;
 
                 const cols = parseCSVRow(rowRaw);
                 const namaUtama = cols[0]; // Kolom A
 
                 if (!namaUtama) continue;
 
-                // Cek Sekolah vs Guru
-                // Logic: Kalau baris ini gak punya link sama sekali = JUDUL SEKOLAH
+                // --- CEK: INI SEKOLAH ATAU GURU? ---
                 let isSchoolHeader = true;
                 let linksData = [];
 
+                // Cek kolom link (B ke kanan)
                 for (let j = 1; j < headers.length; j++) {
                     const url = cols[j] ? cols[j].trim() : '';
-                    if (url.length > 5) { 
-                        isSchoolHeader = false; 
-                        
-                        // INI KUNCINYA:
-                        // Kita ambil teks mentah-mentah dari Header Excel (headers[j])
-                        // Jadi tombolnya bakal persis sama kayak tulisan di Baris 1 Excel
-                        linksData.push({
-                            label: headers[j], 
-                            url: url
-                        });
+                    if (url.length > 5) {
+                        isSchoolHeader = false; // Ada link = Guru
+                        linksData.push({ label: headers[j], url: url });
                     }
                 }
 
-                // Render ke layar
                 if (isSchoolHeader) {
-                    const sep = document.createElement('div');
-                    sep.className = 'school-separator';
-                    sep.textContent = namaUtama.replace(/"/g, ''); 
-                    app.appendChild(sep);
+                    // === INI HEADER SEKOLAH BARU ===
+                    // 1. Buat elemen <details> baru
+                    currentSchoolDetails = document.createElement('details');
+                    currentSchoolDetails.className = 'school-group';
+
+                    // 2. Buat Judul (<summary>)
+                    const summary = document.createElement('summary');
+                    summary.className = 'school-header';
+                    summary.textContent = namaUtama.replace(/"/g, '');
+                    
+                    // 3. Buat Wadah List Guru
+                    currentGuruListDiv = document.createElement('div');
+                    currentGuruListDiv.className = 'guru-list';
+
+                    // Gabungkan
+                    currentSchoolDetails.appendChild(summary);
+                    currentSchoolDetails.appendChild(currentGuruListDiv);
+                    
+                    // Masukkan ke layar utama
+                    app.appendChild(currentSchoolDetails);
+
                 } else {
-                    const card = document.createElement('div');
-                    card.className = 'guru-card';
-
-                    const title = document.createElement('div');
-                    title.className = 'guru-name';
-                    title.textContent = namaUtama.replace(/"/g, '');
-                    card.appendChild(title);
-
-                    const btnGrid = document.createElement('div');
-                    btnGrid.className = 'links-container';
-
-                    if (linksData.length > 0) {
-                        linksData.forEach(link => {
-                            const btn = document.createElement('a');
-                            btn.href = link.url;
-                            
-                            // Tampilkan label tombol apa adanya dari Excel
-                            // Hapus tanda kutip (") kalau kebawa dari CSV
-                            btn.textContent = link.label.replace(/"/g, ''); 
-                            
-                            btn.className = 'link-btn';
-                            btn.target = '_blank';
-                            btnGrid.appendChild(btn);
-                        });
-                        card.appendChild(btnGrid);
+                    // === INI GURU ===
+                    // Masukkan guru ini ke dalam sekolah yang terakhir dibuat (currentGuruListDiv)
+                    
+                    if (currentGuruListDiv) {
+                        const card = createGuruCard(namaUtama, linksData);
+                        currentGuruListDiv.appendChild(card);
                     } else {
-                        const empty = document.createElement('div');
-                        empty.style.color = '#94a3b8';
-                        empty.style.fontStyle = 'italic';
-                        empty.textContent = 'Belum ada dokumen.';
-                        card.appendChild(empty);
+                        // Jaga-jaga kalau di Excel baris paling atas langsung Guru (lupa nulis sekolah)
+                        // Kita bikin grup "Tanpa Sekolah"
+                        const fallbackGroup = document.createElement('details');
+                        fallbackGroup.className = 'school-group';
+                        fallbackGroup.open = true; // Langsung buka
+                        const sum = document.createElement('summary');
+                        sum.className = 'school-header';
+                        sum.textContent = 'Lainnya';
+                        const list = document.createElement('div');
+                        list.className = 'guru-list';
+                        
+                        list.appendChild(createGuruCard(namaUtama, linksData));
+                        fallbackGroup.appendChild(sum);
+                        fallbackGroup.appendChild(list);
+                        app.appendChild(fallbackGroup);
+                        
+                        // Update pointer
+                        currentSchoolDetails = fallbackGroup;
+                        currentGuruListDiv = list;
                     }
-                    app.appendChild(card);
                 }
             }
         }
 
-        // Helper untuk memecah CSV (biar aman kalau ada koma di dalam teks)
+        // Fungsi bikin kartu guru (biar kodingan utama rapi)
+        function createGuruCard(name, links) {
+            const card = document.createElement('div');
+            card.className = 'guru-card';
+
+            const title = document.createElement('div');
+            title.className = 'guru-name';
+            title.textContent = name.replace(/"/g, '');
+            card.appendChild(title);
+
+            const btnGrid = document.createElement('div');
+            btnGrid.className = 'links-container';
+
+            if (links.length > 0) {
+                links.forEach(link => {
+                    const btn = document.createElement('a');
+                    btn.href = link.url;
+                    btn.textContent = link.label.replace(/"/g, '');
+                    btn.className = 'link-btn';
+                    btn.target = '_blank';
+                    btnGrid.appendChild(btn);
+                });
+                card.appendChild(btnGrid);
+            } else {
+                const empty = document.createElement('div');
+                empty.style.color = '#ccc';
+                empty.style.fontSize = '0.8rem';
+                empty.style.fontStyle = 'italic';
+                empty.textContent = 'Belum ada dokumen';
+                card.appendChild(empty);
+            }
+            return card;
+        }
+
         function parseCSVRow(rowText) {
             const matches = rowText.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
             if (!matches) return rowText.split(',');
