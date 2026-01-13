@@ -3,143 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Official</title>
+    <title>Portal Pengawas Sekolah</title>
     <style>
-        /* CSS SEDERHANA BIAR RAPI */
+        /* --- TAMPILAN BERSIH & RAPI --- */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
+            padding: 20px;
+            color: #333;
         }
 
         .container {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 40px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
+            max-width: 800px; /* Lebarin dikit biar muat banyak tombol */
+            margin: 0 auto;
+            padding-bottom: 60px;
         }
 
-        .profile-pic {
-            width: 100px;
-            height: 100px;
+        /* Header Atas (Profil Tante) */
+        .main-header {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .profile-img {
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background-color: #ddd;
-            margin: 0 auto 20px;
-            /* Ganti URL foto di bawah ini */
-            background-image: url('https://via.placeholder.com/150'); 
+            margin: 0 auto 15px;
+            /* GANTI FOTO TANTE DI SINI */
+            background-image: url('foto-tante.jpg');
             background-size: cover;
             background-position: center;
+            border: 4px solid #eef2ff;
         }
 
-        h1 { font-size: 22px; color: #333; margin-bottom: 30px; }
+        h1 { margin: 0; font-size: 1.4rem; color: #1e293b; }
+        p.subtitle { margin: 5px 0 0; color: #64748b; font-size: 0.95rem; }
 
-        /* Style Tombol Link */
+        /* HEADER SEKOLAH (Pemisah) */
+        .school-separator {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+        
+        .school-separator::before {
+            content: '🏫';
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+        /* KARTU GURU */
+        .guru-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+
+        .guru-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            border-color: #cbd5e1;
+        }
+
+        .guru-name {
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .guru-name::before {
+            content: '👤';
+            margin-right: 8px;
+        }
+
+        /* GRID TOMBOL */
+        .links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
         .link-btn {
             display: block;
-            background-color: #ffffff;
-            color: #333;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f8fafc;
+            color: #475569;
             text-decoration: none;
-            border-radius: 30px;
+            border-radius: 8px;
+            font-size: 0.85rem;
             font-weight: 600;
+            text-align: center;
+            border: 1px solid #e2e8f0;
             transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .link-btn:hover {
-            background-color: #2563eb; /* Warna biru pas hover */
+            background-color: #3b82f6;
             color: white;
-            transform: translateY(-2px);
-            border-color: #2563eb;
+            border-color: #3b82f6;
         }
 
-        .loading { color: #888; font-style: italic; }
+        /* Status Empty */
+        .empty-state {
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        .loading { text-align: center; padding: 40px; color: #64748b; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="profile-pic"></div>
-        <h1>Halo, RETNO!👋👋</h1>
-        
-        <div id="link-list">
-            <p class="loading">Sedang memuat link...</p>
+        <div class="main-header">
+            <div class="profile-img"></div>
+            <h1>Portal Supervisi Sekolah</h1>
+            <p class="subtitle">Kumpulan Dokumen Administrasi Guru</p>
+        </div>
+
+        <div id="app">
+            <div class="loading">⏳ Sedang sinkronisasi data...</div>
         </div>
     </div>
 
     <script>
-        // --- LOGIC JAVASCRIPT ---
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
         
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSXgwNDvj-QoABB_VFgNfCGeAm0LP2UFq4QdzLi21yfI6PMqaXtS1Khq_IpLn5lx7-xmvrGncUdZhf/pub?output=csv'; 
+        // 1. Masukkan Link CSV Google Sheets di sini:
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSXgwNDvj-QoABB_VFgNfCGeAm0LP2UFq4QdzLi21yfI6PMqaXtS1Khq_IpLn5lx7-xmvrGncUdZhf/pub?output=csv'; 
 
-        const linkList = document.getElementById('link-list');
+        // ==========================================
+        // LOGIC CODE
+        // ==========================================
+        const app = document.getElementById('app');
 
-        async function fetchLinks() {
+        async function init() {
             try {
-                // Fetch data dari Google Sheets
-                const response = await fetch(SHEET_URL);
-                const data = await response.text();
-
-                // Bersihkan loading text
-                linkList.innerHTML = '';
-
-                // Parsing CSV (Ubah text CSV jadi Array)
-                // Kita split berdasarkan baris (\n)
-                const rows = data.split('\n');
-
-                // Loop mulai dari index 1 (karena index 0 itu Header Judul,Link)
-                rows.slice(1).forEach(row => {
-                    // Split kolom berdasarkan koma
-                    // Note: Ini parser sederhana, kalau di judul ada koma bisa error. 
-                    // Tapi cukup buat kasus simple.
-                    const columns = row.split(',');
-                    
-                    // Ambil Judul (kolom 0) dan Link (kolom 1)
-                    const title = columns[0]; 
-                    const url = columns[1];
-
-                    if (title && url) {
-                        createLinkButton(title, url);
-                    }
-                });
-
-            } catch (error) {
-                console.error('Error:', error);
-                linkList.innerHTML = '<p style="color:red">Gagal memuat link. Cek konsol.</p>';
+                const res = await fetch(SHEET_CSV_URL);
+                const text = await res.text();
+                renderPage(text);
+            } catch (err) {
+                console.error(err);
+                app.innerHTML = `
+                    <div style="text-align:center; color:red; padding:20px;">
+                        <h3>Gagal Memuat Data</h3>
+                        <p>Pastikan link CSV benar dan "Published to Web".</p>
+                    </div>`;
             }
         }
 
-        // Fungsi bikin tombol HTML
-        function createLinkButton(text, url) {
-            // Hapus spasi/enter yang mungkin kebawa di URL
-            const cleanUrl = url.trim();
-            const cleanText = text.replace(/"/g, ''); // Hapus tanda kutip jika ada
+        function renderPage(csvText) {
+            app.innerHTML = ''; // Bersihkan loading
 
-            const a = document.createElement('a');
-            a.href = cleanUrl;
-            a.textContent = cleanText;
-            a.className = 'link-btn';
-            a.target = '_blank'; // Buka di tab baru
-            
-            linkList.appendChild(a);
+            // 1. Parsing CSV yang aman (menangani koma dalam kutip)
+            // Kita split baris dulu
+            const rows = csvText.split('\n');
+
+            // 2. Ambil HEADER dari Baris Pertama (Index 0)
+            // Ini akan jadi nama tombol (Absen, Promes, dll)
+            const headers = parseCSVRow(rows[0]); 
+
+            // 3. Loop data dari Baris Kedua (Index 1)
+            for (let i = 1; i < rows.length; i++) {
+                const rowRaw = rows[i];
+                if (!rowRaw.trim()) continue; // Skip baris kosong
+
+                const cols = parseCSVRow(rowRaw);
+                const namaUtama = cols[0]; // Kolom A (Nama Guru / Sekolah)
+
+                if (!namaUtama) continue;
+
+                // --- DETEKSI PINTAR: INI SEKOLAH ATAU GURU? ---
+                // Caranya: Cek apakah baris ini punya link di kolom B ke kanan?
+                // Kalau TIDAK ADA link sama sekali, kita anggap ini JUDUL SEKOLAH.
+                // Kalau ADA minimal 1 link, kita anggap ini GURU.
+                
+                let isSchoolHeader = true;
+                let linksData = [];
+
+                // Cek kolom dari index 1 (Kolom B) sampai habis
+                for (let j = 1; j < headers.length; j++) {
+                    const url = cols[j] ? cols[j].trim() : '';
+                    if (url.length > 5) { // Kalau ada text panjang (URL)
+                        isSchoolHeader = false; // Berarti ini Guru
+                        linksData.push({
+                            label: headers[j], // Nama kolom jadi label tombol
+                            url: url
+                        });
+                    }
+                }
+
+                // --- RENDER KE LAYAR ---
+                
+                if (isSchoolHeader) {
+                    // RENDER JUDUL SEKOLAH
+                    const sep = document.createElement('div');
+                    sep.className = 'school-separator';
+                    sep.textContent = namaUtama;
+                    app.appendChild(sep);
+                } else {
+                    // RENDER KARTU GURU
+                    const card = document.createElement('div');
+                    card.className = 'guru-card';
+
+                    // Nama Guru
+                    const title = document.createElement('div');
+                    title.className = 'guru-name';
+                    title.textContent = namaUtama;
+                    card.appendChild(title);
+
+                    // Container Tombol
+                    const btnGrid = document.createElement('div');
+                    btnGrid.className = 'links-container';
+
+                    if (linksData.length > 0) {
+                        linksData.forEach(link => {
+                            const btn = document.createElement('a');
+                            btn.href = link.url;
+                            btn.textContent = link.label;
+                            btn.className = 'link-btn';
+                            btn.target = '_blank';
+                            btnGrid.appendChild(btn);
+                        });
+                        card.appendChild(btnGrid);
+                    } else {
+                        // Kalau guru ditulis tapi lupa kasih link
+                        const empty = document.createElement('div');
+                        empty.className = 'empty-state';
+                        empty.textContent = 'Belum ada dokumen yang diunggah.';
+                        card.appendChild(empty);
+                    }
+
+                    app.appendChild(card);
+                }
+            }
         }
 
-        // Jalankan fungsi saat halaman dibuka
-        // Cek dulu user udah ganti URL belum
-        if(SHEET_URL === 'PASTE_LINK_GOOGLE_SHEET_CSV_DISINI') {
-             linkList.innerHTML = '<p style="color:red">Link CSV Google Sheet belum dimasukkan ke kodingan!</p>';
-        } else {
-            fetchLinks();
+        // Helper function untuk handle CSV (jika ada koma dalam teks)
+        function parseCSVRow(rowText) {
+            // Regex sederhana untuk split CSV tapi mengabaikan koma di dalam tanda kutip
+            const matches = rowText.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if (!matches) return rowText.split(',');
+            return matches.map(m => m.replace(/^"|"$/g, '').trim()); // Hapus tanda kutip
         }
 
+        // Start App
+        init();
     </script>
 </body>
 </html>
