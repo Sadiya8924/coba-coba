@@ -39,6 +39,7 @@
 
         h1 { font-size: 22px; color: #333; margin-bottom: 30px; }
 
+        /* Style Tombol Link */
         .link-btn {
             display: block;
             background-color: #ffffff;
@@ -133,7 +134,7 @@
 
         // Jalankan fungsi saat halaman dibuka
         // Cek dulu user udah ganti URL belum
-        if(SHEET_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSXgwNDvj-QoABB_VFgNfCGeAm0LP2UFq4QdzLi21yfI6PMqaXtS1Khq_IpLn5lx7-xmvrGncUdZhf/pub?output=csv') {
+        if(SHEET_URL === 'PASTE_LINK_GOOGLE_SHEET_CSV_DISINI') {
              linkList.innerHTML = '<p style="color:red">Link CSV Google Sheet belum dimasukkan ke kodingan!</p>';
         } else {
             fetchLinks();
