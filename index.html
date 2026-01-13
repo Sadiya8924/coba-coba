@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Tante Official</title>
+    <title>Link Official</title>
     <style>
         /* CSS SEDERHANA BIAR RAPI */
         body {
@@ -18,7 +18,7 @@
 
         .container {
             width: 100%;
-            max-width: 400px; /* Ukuran lebar ala HP */
+            max-width: 400px;
             background: white;
             padding: 40px 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -39,7 +39,6 @@
 
         h1 { font-size: 22px; color: #333; margin-bottom: 30px; }
 
-        /* Style Tombol Link */
         .link-btn {
             display: block;
             background-color: #ffffff;
@@ -68,7 +67,7 @@
 
     <div class="container">
         <div class="profile-pic"></div>
-        <h1>Halo, ini Tante!</h1>
+        <h1>Halo, SRI!</h1>
         
         <div id="link-list">
             <p class="loading">Sedang memuat link...</p>
@@ -78,7 +77,6 @@
     <script>
         // --- LOGIC JAVASCRIPT ---
         
-        // 1. Paste Link CSV dari Google Sheets di sini:
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSXgwNDvj-QoABB_VFgNfCGeAm0LP2UFq4QdzLi21yfI6PMqaXtS1Khq_IpLn5lx7-xmvrGncUdZhf/pub?output=csv'; 
 
         const linkList = document.getElementById('link-list');
@@ -135,7 +133,7 @@
 
         // Jalankan fungsi saat halaman dibuka
         // Cek dulu user udah ganti URL belum
-        if(SHEET_URL === 'PASTE_LINK_GOOGLE_SHEET_CSV_DISINI') {
+        if(SHEET_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSXgwNDvj-QoABB_VFgNfCGeAm0LP2UFq4QdzLi21yfI6PMqaXtS1Khq_IpLn5lx7-xmvrGncUdZhf/pub?output=csv') {
              linkList.innerHTML = '<p style="color:red">Link CSV Google Sheet belum dimasukkan ke kodingan!</p>';
         } else {
             fetchLinks();
